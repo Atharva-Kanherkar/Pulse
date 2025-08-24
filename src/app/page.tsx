@@ -1,154 +1,125 @@
-import React from "react";
-import Navbar from "@/components/landing/navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Shield, Users, Database, Palette } from "lucide-react";
-import Link from "next/link";
-import { Hero } from "@/components/ui/animated-hero";
+// import React from "react";
+// import Navbar from "@/components/landing/navbar";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Shield, Users, Database, Palette } from "lucide-react";
+// import Link from "next/link";
+// import {Hero }from "@/components/landing/hero";
 
-const HomePage = () => {
-  const features = [
-    {
-      icon: <Shield className="h-5 w-5" />,
-      title: "Authentication & Authorization",
-      description:
-        "Complete auth system with email verification, password reset, and role-based access control.",
-      items: [
-        "Email & Password Auth",
-        "Session Management",
-        "Role-based Access",
-        "Account Linking",
-      ],
-    },
-    {
-      icon: <Users className="h-5 w-5" />,
-      title: "User Management",
-      description:
-        "Comprehensive user administration with advanced controls and audit capabilities.",
-      items: [
-        "User Registration",
-        "Profile Management",
-        "Ban/Unban Users",
-        "Session Revocation",
-      ],
-    },
-    {
-      icon: <Database className="h-5 w-5" />,
-      title: "Database & ORM",
-      description:
-        "Modern database setup with type-safe queries and automated migrations.",
-      items: [
-        "PostgreSQL",
-        "Drizzle ORM",
-        "Type Safety",
-        "Automated Migrations",
-      ],
-    },
-    {
-      icon: <Palette className="h-5 w-5" />,
-      title: "Modern UI/UX",
-      description:
-        "Beautiful, responsive design system with accessibility built-in.",
-      items: ["Tailwind CSS", "shadcn ui", "Dark Mode", "Mobile Responsive"],
-    },
-  ];
+// const HomePage = () => {
+//    return (
+//         <div>
+//          <Navbar/>
+//            <Hero />
+//         </div>
+//    )
+// };
 
-  const techStack = [
-    "Next.js 15",
-    "Better Auth",
-    "PostgreSQL",
-    "Drizzle ORM",
-    "Tailwind CSS",
-    "shadcn ui",
-    "TypeScript",
-    "React Hook Form",
-    "Zod",
-  ];
+// export default HomePage;
+ // app/page.tsx
+ // src/app/page.tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+import MeetingDashboard from '@/components/dashboard/MeetingDashboard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import { apiClient } from '@/lib/api';
+
+export default function HomePage() {
+  const [healthStatus, setHealthStatus] = useState<{
+    status: string;
+    portia_available: boolean;
+    environment: string;
+  } | null>(null);
+  const [healthError, setHealthError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const health = await apiClient.healthCheck();
+        setHealthStatus(health);
+        setHealthError(null);
+      } catch (error) {
+        setHealthError(error instanceof Error ? error.message : 'Health check failed');
+      }
+    };
+
+    checkHealth();
+    const interval = setInterval(checkHealth, 30000); // Check every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Hero Section */}
-        <Hero />
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="border-border/50 hover:border-border transition-colors"
-            >
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    {feature.icon}
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
-                  </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Health Status Bar */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                {healthError ? (
+                  <>
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <span className="text-sm text-red-600">Backend Unavailable</span>
+                  </>
+                ) : healthStatus?.status === 'healthy' ? (
+                  <>
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <span className="text-sm text-green-600">Backend Connected</span>
+                  </>
+                ) : (
+                  <>
+                    <Clock className="h-4 w-4 text-yellow-500" />
+                    <span className="text-sm text-yellow-600">Connecting...</span>
+                  </>
+                )}
+              </div>
+              {healthStatus && (
+                <div className="flex items-center gap-2">
+                  <Badge variant={healthStatus.portia_available ? "default" : "secondary"}>
+                    Portia: {healthStatus.portia_available ? 'Available' : 'Mock Mode'}
+                  </Badge>
+                  <Badge variant="outline">
+                    {healthStatus.environment}
+                  </Badge>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-2">
-                  {feature.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      <span className="text-sm text-muted-foreground">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Tech Stack */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Tech Stack</CardTitle>
-            <CardDescription>
-              Built with modern technologies for performance, security, and
-              developer experience
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {techStack.map((tech, index) => (
-                <Badge key={index} variant="outline" className="px-3 py-1">
-                  {tech}
-                </Badge>
-              ))}
+              )}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Footer */}
-        <div className="text-center mt-12 pt-8 border-t border-border/50">
-          <p className="text-muted-foreground">
-            Built with ❤️ by{" "}
-            <Link
-              href="https://zexa.app"
-              target="_blank"
-              className="text-primary hover:underline font-medium"
-            >
-              Zexa
-            </Link>
-          </p>
+          </div>
         </div>
       </div>
+
+      {healthError ? (
+        <div className="max-w-7xl mx-auto p-4">
+          <Card className="border-red-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-red-600">
+                <AlertCircle className="h-5 w-5" />
+                Backend Connection Error
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-red-600 mb-4">{healthError}</p>
+              <p className="text-sm text-gray-600">
+                Make sure the Smart Meeting Agent backend is running on{' '}
+                <code className="bg-gray-100 px-2 py-1 rounded">
+                  {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}
+                </code>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <MeetingDashboard />
+      )}
     </div>
   );
-};
-
-export default HomePage;
+}

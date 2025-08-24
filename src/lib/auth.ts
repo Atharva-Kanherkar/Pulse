@@ -21,31 +21,31 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: false,
     resetPasswordTokenExpiresIn: 60 * 60, // 1 hour
   },
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Verify your email address",
-        text: `Click the link to verify your email: ${url}`,
-      });
-    },
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
-  },
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    },
-    google: {
-      prompt: "select_account",
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
+  // emailVerification: {
+  //   sendVerificationEmail: async ({ user, url }) => {
+  //     await sendEmail({
+  //       to: user.email,
+  //       subject: "Verify your email address",
+  //       text: `Click the link to verify your email: ${url}`,
+  //     });
+  //   },
+  //   sendOnSignUp: true,
+  //   autoSignInAfterVerification: true,
+  // },
+  // socialProviders: {
+  //   github: {
+  //     clientId: process.env.GITHUB_CLIENT_ID as string,
+  //     clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+  //   },
+  //   google: {
+  //     prompt: "select_account",
+  //     clientId: process.env.GOOGLE_CLIENT_ID as string,
+  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  //   },
+  // },
   plugins: [
     nextCookies(),
     admin({
