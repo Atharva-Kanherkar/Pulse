@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Zexa Better Auth",
-  description: "A Next.js boilerplate for building web applications",
+  title: "PulseAI",
+  description: "AI-Powered Meeting Summarization and Insights",
 };
 
 export default function RootLayout({
