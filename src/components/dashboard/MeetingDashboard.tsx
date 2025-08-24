@@ -1,25 +1,16 @@
-// src/components/dashboard/MeetingDashboard.tsx
 'use client';
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Bot, 
-  Calendar, 
-  Users, 
-  Code, 
-  MessageSquare, 
   FileText,
   Play,
   Settings,
-  Clock,
-  CheckCircle2,
   AlertCircle,
   Loader2
 } from 'lucide-react';
@@ -38,7 +29,7 @@ export default function MeetingDashboard() {
   const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data: jobData, loading: jobLoading, error: jobError } = usePolling(activeJobId);
+  const { data: jobData, error: jobError } = usePolling(activeJobId);
 
   const handleFullPreparation = async () => {
     setIsSubmitting(true);
@@ -59,7 +50,6 @@ export default function MeetingDashboard() {
 
   const handleCustomPreparation = async () => {
     if (selectedAgents.length === 0) return;
-    
     setIsSubmitting(true);
     try {
       const response = await apiClient.prepareCustomMeeting({
@@ -142,6 +132,7 @@ export default function MeetingDashboard() {
                     <TabsTrigger value="agenda">Agenda Only</TabsTrigger>
                   </TabsList>
 
+                  {/* Full Prep */}
                   <TabsContent value="full" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex items-center space-x-2">
@@ -199,6 +190,7 @@ export default function MeetingDashboard() {
                     </Button>
                   </TabsContent>
 
+                  {/* Custom Agents */}
                   <TabsContent value="custom" className="space-y-4">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Select Agents</label>
@@ -241,6 +233,7 @@ export default function MeetingDashboard() {
                     </Button>
                   </TabsContent>
 
+                  {/* Agenda */}
                   <TabsContent value="agenda" className="space-y-4">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Focus Mode</label>

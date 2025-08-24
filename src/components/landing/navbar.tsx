@@ -58,7 +58,8 @@ const Navbar = () => {
                 Pulse
               </span>
               <span className={`text-xs text-green-400/60 -mt-1 ${accentFont.className}`}>
-                // AI Chief of Staff
+                {/* AI Chief of Staff */}
+                AI Chief of Staff
               </span>
             </div>
           </Link>
@@ -110,7 +111,8 @@ const Navbar = () => {
                   className={`hidden sm:flex items-center gap-1 bg-green-500/10 text-green-400 border border-green-500/30 hover:bg-green-500/20 transition-colors duration-300 ${accentFont.className}`}
                 >
                   <Shield className="h-3 w-3" />
-                  // Admin
+                  {/* Admin */}
+                  Admin
                 </Badge>
               )}
 
@@ -142,7 +144,8 @@ const Navbar = () => {
                   <DropdownMenuLabel className="font-normal p-4">
                     <div className="flex flex-col space-y-2">
                       <div className={`text-xs text-green-400/60 ${accentFont.className}`}>
-                        // User Profile
+                        {/* User Profile */}
+                        User Profile
                       </div>
                       <p className={`text-sm font-semibold leading-none text-white ${headlineFont.className}`}>
                         {session.user.name || "User"}

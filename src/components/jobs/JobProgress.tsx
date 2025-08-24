@@ -44,18 +44,18 @@ export function JobProgress({ job }: JobProgressProps) {
     }
   };
 
-  const getStatusColor = () => {
-    switch (job.status) {
-      case 'running':
-        return 'bg-blue-500';
-      case 'completed':
-        return 'bg-green-500';
-      case 'failed':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
+  // const getStatusColor = () => {
+  //   switch (job.status) {
+  //     case 'running':
+  //       return 'bg-blue-500';
+  //     case 'completed':
+  //       return 'bg-green-500';
+  //     case 'failed':
+  //       return 'bg-red-500';
+  //     default:
+  //       return 'bg-gray-500';
+  //   }
+  // };
 
   const progressPercentage = job.progress 
     ? (job.progress.completed_agents.length / job.progress.total_agents) * 100

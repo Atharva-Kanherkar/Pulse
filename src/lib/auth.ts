@@ -1,6 +1,5 @@
 import { db } from "@/db";
 import * as schema from "@/db/schema";
-import { sendEmail } from "@/lib/email";
 import { betterAuth } from "better-auth";
 import { admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
